@@ -1,0 +1,56 @@
+version: '3'
+
+tasks:
+    build:
+        cmd: 'docker compose build'
+    
+    build:no-cache:
+        cmd: 'docker compose build --no-cache'
+
+    up:
+        cmd: 'XDEBUG_MODE=develop,debug docker compose up --wait'
+
+    restart:
+        desc: 'Restart all, or givenw containers'
+        cmd: 'docker compose restart {{.CLI_ARGS}}'
+
+    down:
+        cmd: 'docker compose down --remove-orphans {{.CLI_ARGS}}'
+
+    down:volumes:
+        cmd: { task: 'down', vars: { CLI_ARGS: '--volumes' } }
+
+    exec:
+        cmd: 'docker compose exec {{.CLI_ARGS}}'
+
+    composer:
+        cmd: 'docker compose exec php composer {{.CLI_ARGS}}'
+
+    composer:install:
+        cmd: { task: 'composer', vars: { CLI_ARGS: 'install' } }
+
+    composer:require:
+        cmd: { task: 'composer', vars: { CLI_ARGS: 'require {{.CLI_ARGS}}' } }
+
+    composer:require:dev:
+        cmd: { task: 'composer:require', vars: { CLI_ARGS: '--dev {{.CLI_ARGS}}' } }
+
+    sf:
+        desc: 'Run Symfony console'
+        cmd: 'docker compose exec php bin/console {{.CLI_ARGS}}'
+
+    sfx:
+        desc: 'Run Symfony console'
+        cmd: 'docker compose exec php php -d xdebug.start_with_request=yes bin/console {{.CLI_ARGS}}'
+
+    vendor:
+        desc: 'Run binaries in the vendor/bin directory'
+        cmd: 'docker compose exec php ./vendor/bin/{{.CLI_ARGS}}'
+
+    aliases:
+        desc: 'Create aliases for top level tasks'
+        summary: |
+            To use the aliases task, run…
+            $> eval $(task aliases)
+        silent: true
+        cmd: 'task  --list-all | egrep ''^\* [^\:]+: +'' | grep -v aliases | choose 1 | cut -d ":" -f 1 | xargs -I {} echo ''alias {}="task {} --"'''
