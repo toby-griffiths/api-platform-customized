@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use App\Entity\Trait\SoftDeleteable;
 use App\Entity\Trait\TimestampableEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -12,8 +14,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ApiResource(mercure: true)]
 #[ORM\Entity]
+#[Gedmo\SoftDeleteable(timeAware: true)]
 class Greeting
 {
+    use SoftDeleteable;
     use TimestampableEntityTrait;
 
 

@@ -2,14 +2,16 @@
 
 declare(strict_types=1);
 
-use App\Entity\Trait\TimestampableEntityTrait;
+use App\Entity\Trait\SoftDeleteable;use App\Entity\Trait\TimestampableEntityTrait;
 use Symfony\Bundle\MakerBundle\Maker\Common\EntityIdTypeEnum;
 use Symfony\Bundle\MakerBundle\Util\UseStatementGenerator;
 
 assert(isset($use_statements) && $use_statements instanceof UseStatementGenerator);
 $use_statements->addUseStatement(
     [
+        SoftDeleteable::class,
         TimestampableEntityTrait::class,
+        ['Gedmo\Mapping\Annotation' => 'Gedmo']
     ],
 );
 
@@ -31,8 +33,10 @@ namespace <?= $namespace ?>;
 <?php if ($broadcast): ?>
     #[Broadcast]
 <?php endif ?>
+#[Gedmo\SoftDeleteable(timeAware: true)]
 class <?= $class_name . "\n" ?>
 {
+    use SoftDeleteable;
     use TimestampableEntityTrait;
 
 
