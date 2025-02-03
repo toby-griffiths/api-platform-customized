@@ -20,8 +20,8 @@ tasks:
     down:volumes:
         cmd: { task: 'down', vars: { CLI_ARGS: '--volumes' } }
 
-    exec:
-        cmd: 'docker compose exec {{.CLI_ARGS}}'
+    exec-php:
+        cmd: 'docker compose exec php {{.CLI_ARGS}}'
 
     composer:
         cmd: 'docker compose exec php composer {{.CLI_ARGS}}'
