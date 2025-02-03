@@ -47,6 +47,16 @@ tasks:
         desc: 'Run binaries in the vendor/bin directory'
         cmd: 'docker compose exec php ./vendor/bin/{{.CLI_ARGS}}'
 
+    pest:
+        cmds:
+            - { task: 'sf', vars: { CLI_ARGS: '-e test doctrine:database:drop --force --if-exists' } }
+            - { task: 'sf', vars: { CLI_ARGS: '-e test doctrine:database:create' } }
+            - { task: 'sf', vars: { CLI_ARGS: '-e test doctrine:migrations:migrate -n' } }
+            - { task: 'pest-only', vars: { CLI_ARGS: '{{.CLI_ARGS}}' } }
+
+    pest-only:
+            - { task: 'vendor', vars: { CLI_ARGS: 'pest {{.CLI_ARGS}}' } }
+
     aliases:
         desc: 'Create aliases for top level tasks'
         summary: |
