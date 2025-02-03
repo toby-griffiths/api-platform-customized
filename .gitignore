@@ -1,3 +1,4 @@
 /.env
+/.idea/
 /helm/api-platform/charts/*
 !/helm/api-platform/charts/.gitignore
