@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use App\Entity\Trait\TimestampableEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -13,6 +14,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity]
 class Greeting
 {
+    use TimestampableEntityTrait;
+
+
     /**
      * The entity ID
      */
