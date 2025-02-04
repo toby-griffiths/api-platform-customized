@@ -2,15 +2,20 @@
 
 declare(strict_types=1);
 
-use App\Entity\Trait\SoftDeleteable;use App\Entity\Trait\TimestampableEntityTrait;
+use App\Entity\Trait\VersionedSoftDeleteableTrait;
+use App\Entity\Trait\TimestampableEntityTrait;
+use App\Entity\LogEntry;
+use Gedmo\Loggable\Loggable;
 use Symfony\Bundle\MakerBundle\Maker\Common\EntityIdTypeEnum;
 use Symfony\Bundle\MakerBundle\Util\UseStatementGenerator;
 
 assert(isset($use_statements) && $use_statements instanceof UseStatementGenerator);
 $use_statements->addUseStatement(
     [
-        SoftDeleteable::class,
+        Loggable::class,
+        LogEntry::class,
         TimestampableEntityTrait::class,
+        VersionedSoftDeleteableTrait::class,
         ['Gedmo\Mapping\Annotation' => 'Gedmo']
     ],
 );
@@ -34,10 +39,11 @@ namespace <?= $namespace ?>;
     #[Broadcast]
 <?php endif ?>
 #[Gedmo\SoftDeleteable(timeAware: true)]
-class <?= $class_name . "\n" ?>
+#[Gedmo\Loggable(logEntryClass: LogEntry::class)]
+class <?= $class_name . "\n" ?> implements Loggable
 {
-    use SoftDeleteable;
     use TimestampableEntityTrait;
+    use VersionedSoftDeleteableTrait;
 
 
 <?php if (EntityIdTypeEnum::UUID === $id_type): ?>
@@ -45,6 +51,7 @@ class <?= $class_name . "\n" ?>
     #[ORM\Column(type: UuidType::NAME, unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    #[Gedmo\Versioned]
     private ?Uuid $id = null;
 
     public function getId(): ?Uuid
