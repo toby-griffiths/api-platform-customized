@@ -8,14 +8,16 @@ use ApiPlatform\Metadata\ApiProperty;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Copy of Gedmo trait with DateTimeImmutable type.
  */
-trait SoftDeleteable
+trait VersionedSoftDeleteableTrait
 {
     #[ApiProperty(writable: false)]
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Gedmo\Versioned]
     protected ?DateTimeImmutable $deletedAt;
 
 
