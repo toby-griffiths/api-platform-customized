@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\EventListener;
 
+use App\Entity\LogEntry;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
-use Gedmo\Loggable\Entity\LogEntry;
 use Gedmo\Loggable\Entity\MappedSuperclass\AbstractLogEntry;
 use Gedmo\Mapping\Annotation\Loggable;
 use Gedmo\Mapping\Annotation\Versioned;
